@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.3'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.bci'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+apply from: 'gradle/dependencies.gradle'
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-web:${springBootVer}"
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
+
+	// Lombok to reduce boilerplate code (getters, setters, constructors, etc.)
+	compileOnly  "org.projectlombok:lombok:${lombokVer}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVer}"
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:${jpaVer}")
+
+
+	// JJWT (Java JWT) for creating and verifying JSON Web Tokens
+	// It's split into API, Implementation, and Jackson/Gson specific parts
+	implementation "io.jsonwebtoken:jjwt-api:${jwtVer}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVer}"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVer}" // Use jjwt-jackson for JSON processing with Jackson
+	implementation "jakarta.validation:jakarta.validation-api:${jakarta_valid}"
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
